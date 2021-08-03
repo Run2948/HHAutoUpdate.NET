@@ -7,11 +7,11 @@
   <p align="center">
     轻松地将自动更新升级功能添加到经典桌面应用程序项目中
     <br />
-    <a href="https://github.com/micahh28/HHAutoUpdate.NET/releases">Release版本</a>
+    <a href="https://github.com/Run2948/HHAutoUpdate.NET/releases">Release版本</a>
     ·
-    <a href="https://github.com/micahh28/HHAutoUpdate.NET/issues">报告Bug</a>
+    <a href="https://github.com/Run2948/HHAutoUpdate.NET/issues">报告Bug</a>
     ·
-    <a href="https://github.com/micahh28/HHAutoUpdate.NET/pulls">提出新特性</a>
+    <a href="https://github.com/Run2948/HHAutoUpdate.NET/pulls">提出新特性</a>
   </p>
 
 </p>
