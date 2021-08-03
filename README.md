@@ -74,7 +74,7 @@ HHUpdateApp是.NET程序桌面应用程序。她可以轻松地将自动更新�
 |  参数   | 类型  |  说明  |
 |  ----  | ----  |  ----  |
 | FileName  | sting |【升级程序】HHUpdateApp.exe程序所在路径
-| Arguments  | sting[] |参数数组:Arguments[0]:发起更新的名称（例如，LOLClient）；Arguments[1]：检查模式：0,定时检查；1，手动检查（区别就是，自动检查的状态下，如果有新版本更新，才会显示更新提示框,例如你的应用程序使用的是定时检查更新，那么建议使用 0,自动更新）
+| Arguments  | sting[] |参数数组:Arguments[0]:发起更新的名称（例如，LOLClient）；Arguments[1]：更新模式：1,静默更新；0,手动更新（区别就是，自动更新的状态下，如果有新版本更新，就会后台静默安装，那么建议使用 1, 自动更新）
 
 ```csharp
     /// <summary>
@@ -87,7 +87,7 @@ HHUpdateApp是.NET程序桌面应用程序。她可以轻松地将自动更新�
             ProcessStartInfo processStartInfo = new ProcessStartInfo()
             {
                 FileName = "~\HHUpdateApp.exe",//参数:【升级程序】HHUpdateApp.exe程序所在路径
-                Arguments = "LOLClient 1"//参数1:【应用程序】的名词，例如：LOLClient；参数1:检查更新模式
+                Arguments = "LOLClient 1"//参数1:【应用程序】的名词，例如：LOLClient；参数2:静默更新
             ;
             Process proc = Process.Start(processStartInfo);
             if (proc != null)
@@ -150,7 +150,7 @@ private void button1_Click(object sender, EventArgs e)
 
 ```json
 {
-  "ApplicationStart": "HHUpdate.Test.exe",
+  "ApplicationStart": "HHUpdate.Test", // 程序系统进程为 HHUpdate.Test.exe
   "ReleaseDate": "2020520",
   "ReleaseUrl": "http://localhost:8085/UpdateDemo/Debug.zip",
   "ReleaseVersion": "1.0.0.1",
@@ -162,18 +162,17 @@ private void button1_Click(object sender, EventArgs e)
 
 ### 作者
 
-- [micahh28](https://github.com/micahh28)
+- [Run2948](https://github.com/Run2948)
 
 ### 版权说明
 
-该项目签署了MIT 授权许可，详情请参阅 [LICENSE.txt](https://github.com/micahh28/HHAutoUpdate.NET/blob/master/LICENSE)
+该项目签署了MIT 授权许可，详情请参阅 [LICENSE](https://github.com/Run2948/HHAutoUpdate.NET/blob/master/LICENSE)
 
 ### 相关
 
-[更新日志](https://github.com/micahh28/HHAutoUpdate.NET/releases)
+[更新日志](https://github.com/Run2948/HHAutoUpdate.NET/releases)
 
 ### 鸣谢
 
-- GCTV
-
+- micahh28
 
