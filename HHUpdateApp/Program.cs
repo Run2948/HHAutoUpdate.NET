@@ -22,12 +22,12 @@ namespace HHUpdateApp
             Application.SetCompatibleTextRenderingDefault(false);
             //C# Mutex：（互斥锁）线程同步
             //避免程序重复运行
-            System.Threading.Mutex mutex = new System.Threading.Mutex(true, "HHUpdateApp_OnlyRunOneInstance", out bool isRuned);
+            Mutex mutex = new Mutex(true, "HHUpdateApp_OnlyRunOneInstance", out bool isRunning);
             //第一个参数:true--给调用线程赋予互斥体的初始所属权
             //第一个参数:TQ_WinClient_OnlyRunOneInstance--互斥体的名称
-            //第三个参数:返回值isRuned,如果调用线程已被授予互斥体的初始所属权,则返回true
+            //第三个参数:返回值isRunning,如果调用线程已被授予互斥体的初始所属权,则返回true
 
-            if (isRuned)
+            if (isRunning)
             {
                 try
                 {
@@ -67,14 +67,14 @@ namespace HHUpdateApp
                             ProcessStartInfo startInfo = new ProcessStartInfo
                             {
                                 //设置运行文件 
-                                FileName = System.Windows.Forms.Application.ExecutablePath,
+                                FileName = Application.ExecutablePath,
                                 //设置启动动作,确保以管理员身份运行 
                                 Verb = "runas",
 
                                 Arguments = " " + LaunchAppName
                             };
                             //如果不是管理员，则启动UAC 
-                            System.Diagnostics.Process.Start(startInfo);
+                            Process.Start(startInfo);
                         }
                         else
                         {
@@ -92,16 +92,16 @@ namespace HHUpdateApp
         /// <summary>
         /// 拉起更新请求的业务程序名，稍后更新时，根据这个值关闭对应的进程
         /// </summary>
-        public static String LaunchAppName = "";
+        public static string LaunchAppName = "";
 
         /// <summary>
         /// 更新信息的JSON文件所在位置
         /// </summary>
-        public static String ServerUpdateUrl = Settings.Default.ServerUpdateUrl;
+        public static string ServerUpdateUrl = Settings.Default.ServerUpdateUrl;
 
         /// <summary>
         /// 检查更新模式：0,自动更新；1，手动检查（区别就是，自动更新的状态下，如果有新版本更新，才会显示提示框）
         /// </summary>
-        public static String CheckMode = "1";
+        public static string CheckMode = "1";
     }
 }

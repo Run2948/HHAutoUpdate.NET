@@ -85,7 +85,6 @@ namespace HHUpdateApp
 
         }
 
-
         /// <summary>
         /// 业务应用重启
         /// </summary>
@@ -112,7 +111,6 @@ namespace HHUpdateApp
                 {
                     LogManger.Instance.Info("下载更新程序：下载更新包文件" + RemoteVerInfo.ReleaseVersion);
                     web.DownloadFile(RemoteVerInfo.ReleaseUrl, tempPath + RemoteVerInfo.ReleaseVersion + ".zip");
-
                     return;
                 }
                 catch (Exception ex)
@@ -120,7 +118,6 @@ namespace HHUpdateApp
                     LogManger.Instance.Error("下载更新程序：更新包文件" + RemoteVerInfo.ReleaseVersion + "下载失败,本次停止更新，异常信息：" + ex);
                     throw ex;
                 }
-
             }
         }
 

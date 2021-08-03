@@ -23,6 +23,11 @@ namespace HHUpdateApp
         private string launchAppDirectoryName;
 
         /// <summary>
+        /// 需要更新的业务应用程序
+        /// </summary>
+        private string[] allLaunchAppNames;
+
+        /// <summary>
         /// 需要更新的业务应用程序版本号
         /// </summary>
         private string launchAppVer;
@@ -45,7 +50,8 @@ namespace HHUpdateApp
         public MainForm(string _launchAppName, string _checkMode)
         {
             InitializeComponent();
-            launchAppName = _launchAppName;
+            allLaunchAppNames = _launchAppName.Split('#');
+            launchAppName = allLaunchAppNames[0];
             checkMode = _checkMode;
         }
 
@@ -116,10 +122,13 @@ namespace HHUpdateApp
             UpdateWork work = new UpdateWork(launchAppDirectoryName, verInfo);
 
             //关闭业务应用程序关联的进程
-            foreach (Process p in launchProcess)
+            foreach (var appName in allLaunchAppNames)
             {
-                p.Kill();
-                p.Close();
+                foreach (var process in Process.GetProcessesByName(appName))
+                {
+                    process.Kill();
+                    process.Close();
+                }
             }
 
             UpdateForm updateForm = new UpdateForm(work);
