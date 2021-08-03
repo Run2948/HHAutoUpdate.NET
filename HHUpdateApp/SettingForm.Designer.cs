@@ -35,6 +35,8 @@
             this.txtLaunchAppName = new System.Windows.Forms.TextBox();
             this.txtServerUpdateUrl = new System.Windows.Forms.TextBox();
             this.lblServerUpdateUrl = new System.Windows.Forms.Label();
+            this.lblSilentUpdate = new System.Windows.Forms.Label();
+            this.cbxSilentUpdate = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnOk
@@ -45,13 +47,13 @@
             this.btnOk.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.btnOk.IsColorChange = true;
             this.btnOk.IsFontChange = false;
-            this.btnOk.Location = new System.Drawing.Point(288, 274);
+            this.btnOk.Location = new System.Drawing.Point(288, 297);
             this.btnOk.MoveColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(173)))), ((int)(((byte)(25)))));
             this.btnOk.MoveFontColor = System.Drawing.Color.White;
             this.btnOk.Name = "btnOk";
             this.btnOk.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(173)))), ((int)(((byte)(25)))));
             this.btnOk.NormalFontColor = System.Drawing.Color.White;
-            this.btnOk.Size = new System.Drawing.Size(125, 35);
+            this.btnOk.Size = new System.Drawing.Size(125, 38);
             this.btnOk.TabIndex = 28;
             this.btnOk.Text = "确定";
             this.btnOk.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -65,13 +67,13 @@
             this.btnCancel.ForeColor = System.Drawing.Color.Black;
             this.btnCancel.IsColorChange = true;
             this.btnCancel.IsFontChange = false;
-            this.btnCancel.Location = new System.Drawing.Point(116, 274);
+            this.btnCancel.Location = new System.Drawing.Point(116, 297);
             this.btnCancel.MoveColor = System.Drawing.Color.White;
             this.btnCancel.MoveFontColor = System.Drawing.Color.Black;
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.NormalColor = System.Drawing.Color.White;
             this.btnCancel.NormalFontColor = System.Drawing.Color.Black;
-            this.btnCancel.Size = new System.Drawing.Size(125, 35);
+            this.btnCancel.Size = new System.Drawing.Size(125, 38);
             this.btnCancel.TabIndex = 29;
             this.btnCancel.Text = "取消";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -82,7 +84,7 @@
             this.LBTitle.BackColor = System.Drawing.Color.Transparent;
             this.LBTitle.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Bold);
             this.LBTitle.ForeColor = System.Drawing.Color.DimGray;
-            this.LBTitle.Location = new System.Drawing.Point(12, 9);
+            this.LBTitle.Location = new System.Drawing.Point(12, 10);
             this.LBTitle.Name = "LBTitle";
             this.LBTitle.Size = new System.Drawing.Size(39, 19);
             this.LBTitle.TabIndex = 25;
@@ -93,25 +95,25 @@
             this.lblLaunchDirectory.BackColor = System.Drawing.Color.Transparent;
             this.lblLaunchDirectory.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Bold);
             this.lblLaunchDirectory.ForeColor = System.Drawing.Color.DimGray;
-            this.lblLaunchDirectory.Location = new System.Drawing.Point(64, 99);
+            this.lblLaunchDirectory.Location = new System.Drawing.Point(64, 107);
             this.lblLaunchDirectory.Name = "lblLaunchDirectory";
-            this.lblLaunchDirectory.Size = new System.Drawing.Size(118, 19);
+            this.lblLaunchDirectory.Size = new System.Drawing.Size(118, 21);
             this.lblLaunchDirectory.TabIndex = 30;
             this.lblLaunchDirectory.Text = "用户软件名称";
             this.lblLaunchDirectory.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // txtLaunchAppName
             // 
-            this.txtLaunchAppName.Location = new System.Drawing.Point(188, 97);
+            this.txtLaunchAppName.Location = new System.Drawing.Point(188, 105);
             this.txtLaunchAppName.Name = "txtLaunchAppName";
-            this.txtLaunchAppName.Size = new System.Drawing.Size(273, 21);
+            this.txtLaunchAppName.Size = new System.Drawing.Size(273, 20);
             this.txtLaunchAppName.TabIndex = 31;
             // 
             // txtServerUpdateUrl
             // 
-            this.txtServerUpdateUrl.Location = new System.Drawing.Point(188, 147);
+            this.txtServerUpdateUrl.Location = new System.Drawing.Point(188, 159);
             this.txtServerUpdateUrl.Name = "txtServerUpdateUrl";
-            this.txtServerUpdateUrl.Size = new System.Drawing.Size(273, 21);
+            this.txtServerUpdateUrl.Size = new System.Drawing.Size(273, 20);
             this.txtServerUpdateUrl.TabIndex = 33;
             // 
             // lblServerUpdateUrl
@@ -119,18 +121,41 @@
             this.lblServerUpdateUrl.BackColor = System.Drawing.Color.Transparent;
             this.lblServerUpdateUrl.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Bold);
             this.lblServerUpdateUrl.ForeColor = System.Drawing.Color.DimGray;
-            this.lblServerUpdateUrl.Location = new System.Drawing.Point(64, 149);
+            this.lblServerUpdateUrl.Location = new System.Drawing.Point(64, 161);
             this.lblServerUpdateUrl.Name = "lblServerUpdateUrl";
-            this.lblServerUpdateUrl.Size = new System.Drawing.Size(118, 19);
+            this.lblServerUpdateUrl.Size = new System.Drawing.Size(118, 21);
             this.lblServerUpdateUrl.TabIndex = 32;
             this.lblServerUpdateUrl.Text = "升级信息路径";
             this.lblServerUpdateUrl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // lblSilentUpdate
+            // 
+            this.lblSilentUpdate.BackColor = System.Drawing.Color.Transparent;
+            this.lblSilentUpdate.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Bold);
+            this.lblSilentUpdate.ForeColor = System.Drawing.Color.DimGray;
+            this.lblSilentUpdate.Location = new System.Drawing.Point(64, 217);
+            this.lblSilentUpdate.Name = "lblSilentUpdate";
+            this.lblSilentUpdate.Size = new System.Drawing.Size(118, 21);
+            this.lblSilentUpdate.TabIndex = 34;
+            this.lblSilentUpdate.Text = "是否静默升级";
+            this.lblSilentUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cbxSilentUpdate
+            // 
+            this.cbxSilentUpdate.AutoSize = true;
+            this.cbxSilentUpdate.Location = new System.Drawing.Point(189, 217);
+            this.cbxSilentUpdate.Name = "cbxSilentUpdate";
+            this.cbxSilentUpdate.Size = new System.Drawing.Size(15, 14);
+            this.cbxSilentUpdate.TabIndex = 35;
+            this.cbxSilentUpdate.UseVisualStyleBackColor = true;
+            // 
             // SettingForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(525, 330);
+            this.ClientSize = new System.Drawing.Size(525, 358);
+            this.Controls.Add(this.cbxSilentUpdate);
+            this.Controls.Add(this.lblSilentUpdate);
             this.Controls.Add(this.txtServerUpdateUrl);
             this.Controls.Add(this.lblServerUpdateUrl);
             this.Controls.Add(this.txtLaunchAppName);
@@ -156,5 +181,7 @@
         private System.Windows.Forms.TextBox txtLaunchAppName;
         private System.Windows.Forms.TextBox txtServerUpdateUrl;
         private System.Windows.Forms.Label lblServerUpdateUrl;
+        private System.Windows.Forms.Label lblSilentUpdate;
+        private System.Windows.Forms.CheckBox cbxSilentUpdate;
     }
 }

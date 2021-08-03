@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -7,17 +8,25 @@ namespace HHUpdateApp
 {
     public partial class UpdateForm : Form
     {
+        private readonly UpdateWork work;
 
-        private UpdateWork work;
-
-        public UpdateForm(UpdateWork _work)
+        public UpdateForm(UpdateWork work)
         {
             InitializeComponent();
-            work = _work;
+            this.work = work;
         }
 
         private void UpdateForm_Load(object sender, EventArgs e)
         {
+            if (work.SilentUpdate)
+            {
+                this.Hide(); //隐藏当前窗口
+
+                BGWorkerUpdate.RunWorkerAsync();
+
+                this.Size = Size.Empty;
+            }
+
             btnWelcome.Visible = false;
         }
 
@@ -29,25 +38,32 @@ namespace HHUpdateApp
 
         private void UpdateForm_Shown(object sender, EventArgs e)
         {
-            BGWorkerUpdate.RunWorkerAsync();
+            if (!work.SilentUpdate)
+            {
+                BGWorkerUpdate.RunWorkerAsync();
+            }
+            
         }
-
 
         private void BGWorkerUpdate_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            BGWorkerUpdate.ReportProgress(10, "正在升级...");
+            if (!work.SilentUpdate)
+                BGWorkerUpdate.ReportProgress(10, "正在升级...");
             work.Bak();
 
             Thread.Sleep(500);
-            BGWorkerUpdate.ReportProgress(50, "正在下载更新文件...");
+            if (!work.SilentUpdate)
+                BGWorkerUpdate.ReportProgress(50, "正在下载更新文件...");
             work.DownLoad();
 
             Thread.Sleep(500);
-            BGWorkerUpdate.ReportProgress(80, "正在配置更新...");
+            if (!work.SilentUpdate)
+                BGWorkerUpdate.ReportProgress(80, "正在配置更新...");
             work.Update();
 
             Thread.Sleep(500);
-            BGWorkerUpdate.ReportProgress(100);
+            if (!work.SilentUpdate)
+                BGWorkerUpdate.ReportProgress(100);
         }
 
         private void BGWorkerUpdate_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
@@ -66,6 +82,13 @@ namespace HHUpdateApp
 
         private void BGWorkerUpdate_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
+            if (work.SilentUpdate)
+            {
+                work.AppStart();
+                this.DialogResult = DialogResult.OK;
+                return;
+            }
+
             if (e.Cancelled)
             {
                 this.Close();
@@ -73,13 +96,12 @@ namespace HHUpdateApp
 
             btnWelcome.Visible = true;
 
-
             //过程中的异常会被抓住，在这里可以进行处理。
             if (e.Error == null)
             {
                 btnWelcome.Text = "欢迎使用";
                 lblMsg.Text = "程序集版本:" + work.RemoteVerInfo.ReleaseVersion;
-                lblAd.Visible = true;
+                lblAd.Visible = false;
                 lblAd.Text = "用心让交管业务更便捷";
             }
             else

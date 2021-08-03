@@ -31,6 +31,7 @@ namespace HHUpdateApp
             }
             Program.LaunchAppName = txtLaunchAppName.Text;
             Program.ServerUpdateUrl = txtServerUpdateUrl.Text;
+            Program.SilentUpdate = cbxSilentUpdate.Checked;
 
             this.DialogResult = DialogResult.OK;
             return;
@@ -40,6 +41,7 @@ namespace HHUpdateApp
         {
             txtLaunchAppName.Text = Settings.Default.LaunchAppName;
             txtServerUpdateUrl.Text = Settings.Default.ServerUpdateUrl;
+            cbxSilentUpdate.Checked = Settings.Default.SilentUpdate;
         }
     }
 }

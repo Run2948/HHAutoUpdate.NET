@@ -15,7 +15,7 @@ namespace HHUpdateApp
         /// <summary>
         /// 需要更新的业务应用程序,稍后如果需要更新,根据这个名字把相应进程关闭
         /// </summary>
-        private string launchAppName;
+        private readonly string launchAppName;
 
         /// <summary>
         /// 需要更新的业务应用程序所在目录
@@ -25,7 +25,7 @@ namespace HHUpdateApp
         /// <summary>
         /// 需要更新的业务应用程序
         /// </summary>
-        private string[] allLaunchAppNames;
+        private readonly string[] allLaunchAppNames;
 
         /// <summary>
         /// 需要更新的业务应用程序版本号
@@ -38,21 +38,21 @@ namespace HHUpdateApp
         private Process[] launchProcess;
 
         /// <summary>
-        /// 检查更新模式：0,自动更新；1，手动检查（区别就是，自动更新的状态下，除非有新版本更新，才会显示提示框）
+        /// 安装更新模式：true,静默安装；false,手动安装（区别就是，自动更新的状态下，如果有新版本更新，就会后台静默安装）
         /// </summary>
-        private string checkMode;
+        private readonly bool silentUpdate;
 
         /// <summary>
         /// 服务器上的版本信息
         /// </summary>
         private RemoteVersionInfo verInfo;
 
-        public MainForm(string _launchAppName, string _checkMode)
+        public MainForm(string launchAppName, bool silentUpdate)
         {
             InitializeComponent();
-            allLaunchAppNames = _launchAppName.Split('#');
-            launchAppName = allLaunchAppNames[0];
-            checkMode = _checkMode;
+            allLaunchAppNames = launchAppName.Split('#');
+            this.launchAppName = allLaunchAppNames[0];
+            this.silentUpdate = silentUpdate;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -67,7 +67,15 @@ namespace HHUpdateApp
             }
             else
             {
-                HHMessageBox.Show("应用程序未启动: _" + launchAppName);
+                if (!silentUpdate)
+                {
+                    HHMessageBox.Show("应用程序未启动: _" + launchAppName);
+                }
+                else
+                {
+                    LogManger.Instance.Info("应用程序未启动: _" + launchAppName);
+                }
+
                 Application.Exit();
             }
 
@@ -81,18 +89,46 @@ namespace HHUpdateApp
                 {
                     //this.Hide();//隐藏当前窗口
 
-                    if (checkMode == "1")
+                    if (!silentUpdate)
                     {
                         HHMessageBox.Show("当前版本已经是最新版本");
+                    }
+                    else
+                    {
+                        LogManger.Instance.Info("当前版本已经是最新版本");
                     }
 
                     Application.Exit();
                 }
                 else
                 {
-                    this.lblContent.Text = verInfo.VersionDesc;
-                }
+                    if (!silentUpdate)
+                    {
+                        this.lblContent.Text = verInfo.VersionDesc;
+                    }
+                    else
+                    {
+                        this.Hide(); //隐藏当前窗口
 
+                        UpdateWork work = new UpdateWork(launchAppDirectoryName, verInfo, silentUpdate);
+
+                        //关闭业务应用程序关联的进程
+                        foreach (var appName in allLaunchAppNames)
+                        {
+                            foreach (var process in Process.GetProcessesByName(appName))
+                            {
+                                process.Kill();
+                                process.Close();
+                            }
+                        }
+
+                        UpdateForm updateForm = new UpdateForm(work);
+                        if (updateForm.ShowDialog() == DialogResult.OK)
+                        {
+                            Application.Exit();
+                        }
+                    }
+                }
             }
             else
             {
@@ -117,9 +153,9 @@ namespace HHUpdateApp
         /// <param name="e"></param>
         private void btnUpdateNow_Click(object sender, EventArgs e)
         {
-            this.Hide();//隐藏当前窗口
+            this.Hide(); //隐藏当前窗口
 
-            UpdateWork work = new UpdateWork(launchAppDirectoryName, verInfo);
+            UpdateWork work = new UpdateWork(launchAppDirectoryName, verInfo, silentUpdate);
 
             //关闭业务应用程序关联的进程
             foreach (var appName in allLaunchAppNames)
@@ -137,6 +173,7 @@ namespace HHUpdateApp
                 Application.Exit();
             }
         }
+
         /// <summary>
         /// 忽略本次版本更新
         /// </summary>
@@ -150,8 +187,10 @@ namespace HHUpdateApp
 
 
         #region 让窗体变成可移动
+
         [DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
+
         [DllImport("user32.dll")]
         public static extern bool SendMessage(IntPtr hwnd, int wMsg, int wParam, int lParam);
 
@@ -161,7 +200,7 @@ namespace HHUpdateApp
         public const int WM_SYSCOMMAND = 0x0112;
         public const int SC_MOVE = 0xF010;
         public const int HTCAPTION = 0x0002;
-        private IntPtr moveObject = IntPtr.Zero;    //拖动窗体的句柄
+        private IntPtr moveObject = IntPtr.Zero; //拖动窗体的句柄
 
         private void PNTop_MouseDown(object sender, MouseEventArgs e)
         {
@@ -176,14 +215,15 @@ namespace HHUpdateApp
                     moveObject = this.Handle;
                 }
             }
+
             ReleaseCapture();
             SendMessage(moveObject, WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
         }
 
         #endregion
 
-
         #region 私有方法
+
         /// <summary>
         /// 下载服务器上版本信息
         /// </summary>
@@ -191,10 +231,9 @@ namespace HHUpdateApp
         /// <returns></returns>
         private RemoteVersionInfo DownloadUpdateInfo(string serverUrl)
         {
-            string updateJson = "";
             using (WebClient updateClt = new WebClient())
             {
-
+                string updateJson;
                 try
                 {
                     byte[] bJson = updateClt.DownloadData(serverUrl);
@@ -203,19 +242,19 @@ namespace HHUpdateApp
                 catch (Exception ex)
                 {
                     LogManger.Instance.Error("下载服务器上版本信息错误", ex);
-                    HHMessageBox.Show(string.Format("升级信息从 {0} 下载失败：{1}", serverUrl, ex.Message), "错误");
+                    HHMessageBox.Show($"升级信息从 {serverUrl} 下载失败：{ex.Message}", "错误");
                     return null;
                 }
+
                 try
                 {
-                    RemoteVersionInfo info = new RemoteVersionInfo();
-                    info = JsonConvert.DeserializeObject<RemoteVersionInfo>(updateJson);
+                    RemoteVersionInfo info = JsonConvert.DeserializeObject<RemoteVersionInfo>(updateJson);
                     return info;
                 }
                 catch (Exception ex)
                 {
                     LogManger.Instance.Error("升级 json 文件错误", ex);
-                    HHMessageBox.Show(string.Format("升级 json 文件错误：{0}\r\n{0}", ex.Message, updateJson), "错误");
+                    HHMessageBox.Show($"升级 json 文件错误：{ex.Message}\r\n{ex.Message}", "错误");
                     return null;
                 }
             }
@@ -231,32 +270,36 @@ namespace HHUpdateApp
         /// </remarks>
         private static int VersionCompare(string ver1, string ver2)
         {
+            if (string.IsNullOrEmpty(ver2)) return 1;
+
             string[] item1 = ver1.Split('.');
             string[] item2 = ver2.Split('.');
             int len = item1.Length > item2.Length ? item1.Length : item2.Length;
-            int i_item1, i_item2, i = 0;
+            int i = 0;
             int cmpValue = 0;
             while (i < len && cmpValue == 0)
             {
-                i_item1 = 0; i_item2 = 0;
-                if (int.TryParse(item1[i], out i_item1) && int.TryParse(item2[i], out i_item2))
+                if (int.TryParse(item1[i], out int i1) && int.TryParse(item2[i], out int i2))
                 {
-                    cmpValue = i_item1 - i_item2;
+                    cmpValue = i1 - i2;
                 }
                 else
                 {
-                    cmpValue = string.Compare(item1[i], item2[i]);
+                    cmpValue = string.CompareOrdinal(item1[i], item2[i]);
                 }
+
                 i++;
             }
+
             // 两个版本长度不一致，但是前一部分相同的，以长度长的为大。
             if (cmpValue == 0 && item1.Length != item2.Length)
             {
                 cmpValue = item1.Length - item2.Length;
             }
+
             return cmpValue;
         }
-        #endregion
 
+        #endregion
     }
 }

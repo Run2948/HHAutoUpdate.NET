@@ -40,23 +40,23 @@ namespace HHUpdateApp
                     {
                         //拉起更新请求的业务程序，稍后更新时，根据这个值关闭对应的进程
                         LaunchAppName = args[0];
-                        //检查更新模式：0,自动更新；1，手动检查（区别就是，自动更新的状态下，如果有新版本更新，才会显示提示框）
-                        CheckMode = args[1];
+                        //安装更新模式：1,静默安装；0,手动安装（区别就是，自动更新的状态下，如果有新版本更新，就会后台静默安装）
+                        SilentUpdate = args[1] == "1" || args[1] == "True";
                     }
 
                     /* 
                      * 当前用户是管理员的时候，直接启动应用程序 
                      * 如果不是管理员，则使用启动对象启动程序，以确保使用管理员身份运行 
                      */
-                     
+
                     //获得当前登录的Windows用户标示 
                     System.Security.Principal.WindowsIdentity identity = System.Security.Principal.WindowsIdentity.GetCurrent();
                     System.Security.Principal.WindowsPrincipal principal = new System.Security.Principal.WindowsPrincipal(identity);
-                    
+
                     //判断当前登录用户是否为管理员 
                     if (principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator))
                     {
-                        Application.Run(new MainForm(LaunchAppName, CheckMode));
+                        Application.Run(new MainForm(LaunchAppName, SilentUpdate));
                     }
                     else
                     {
@@ -78,7 +78,7 @@ namespace HHUpdateApp
                         }
                         else
                         {
-                            Application.Run(new MainForm(LaunchAppName, CheckMode));
+                            Application.Run(new MainForm(LaunchAppName, SilentUpdate));
                         }
                     }
                 }
@@ -100,8 +100,8 @@ namespace HHUpdateApp
         public static string ServerUpdateUrl = Settings.Default.ServerUpdateUrl;
 
         /// <summary>
-        /// 检查更新模式：0,自动更新；1，手动检查（区别就是，自动更新的状态下，如果有新版本更新，才会显示提示框）
+        /// 安装更新模式：true,静默安装；false,手动安装（区别就是，自动更新的状态下，如果有新版本更新，就会后台静默安装）
         /// </summary>
-        public static string CheckMode = "1";
+        public static bool SilentUpdate = Settings.Default.SilentUpdate;
     }
 }

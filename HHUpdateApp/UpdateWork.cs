@@ -1,29 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Net;
-using System.IO;
+﻿using Ionic.Zip;
+using System;
 using System.Diagnostics;
-using System.Windows.Forms;
-using System.Threading;
-using System.Runtime.InteropServices;
-using Microsoft.Win32;
-using System.Xml;
-using Ionic.Zip;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
-using Newtonsoft.Json;
-using HHUpdateApp.Properties;
+using System.IO;
+using System.Net;
+using System.Text;
 
 namespace HHUpdateApp
 {
     public class UpdateWork
     {
         #region 字段
+
         /// <summary>
         /// 临时目录（WIN7以及以上在C盘只有对于temp目录有操作权限）
         /// </summary>
         string tempPath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), @"HHUpdateApp\temp\");
+
         /// <summary>
         /// 备份目录
         /// </summary>
@@ -37,6 +29,7 @@ namespace HHUpdateApp
         #endregion
 
         #region 属性
+
         /// <summary>
         /// 远程服务器上版本更新参数
         /// </summary>
@@ -47,33 +40,41 @@ namespace HHUpdateApp
         /// </summary>
         public string ProgramDirectoryName { get; set; }
 
+        /// <summary>
+        /// 静默安装更新
+        /// </summary>
+        public bool SilentUpdate { get; set; }
+
         #endregion
 
         /// <summary>
         /// 初始化配置目录信息
         /// </summary>
-        /// <param name="_programName">需要更新的业务应用程序</param>
-        /// <param name="_remoteVerInfo">远程服务器上版本更新参数</param>
-        public UpdateWork(string _programDirectoryName, RemoteVersionInfo _remoteVerInfo)
+        /// <param name="programDirectoryName">需要更新的业务应用程序</param>
+        /// <param name="remoteVerInfo">远程服务器上版本更新参数</param>
+        /// <param name="silentUpdate">静默安装更新</param>
+        public UpdateWork(string programDirectoryName, RemoteVersionInfo remoteVerInfo, bool silentUpdate)
         {
-            ProgramDirectoryName = _programDirectoryName;
-            RemoteVerInfo = _remoteVerInfo;
+            ProgramDirectoryName = programDirectoryName;
+            RemoteVerInfo = remoteVerInfo;
+            SilentUpdate = silentUpdate;
 
-            Process cur = Process.GetCurrentProcess();
+            Process currentProcess = Process.GetCurrentProcess();
 
-            mainDirectoryName = Path.GetFileName(Path.GetDirectoryName(cur.MainModule.FileName));
+            mainDirectoryName = Path.GetFileName(Path.GetDirectoryName(currentProcess.MainModule.FileName));
 
             //创建备份目录信息
-            DirectoryInfo bakinfo = new DirectoryInfo(bakPath);
-            if (bakinfo.Exists == false)
+            DirectoryInfo bakInfo = new DirectoryInfo(bakPath);
+            if (bakInfo.Exists == false)
             {
-                bakinfo.Create();
+                bakInfo.Create();
             }
+
             //创建临时目录信息
-            DirectoryInfo tempinfo = new DirectoryInfo(tempPath);
-            if (tempinfo.Exists == false)
+            DirectoryInfo tempInfo = new DirectoryInfo(tempPath);
+            if (tempInfo.Exists == false)
             {
-                tempinfo.Create();
+                tempInfo.Create();
             }
         }
 
@@ -82,7 +83,6 @@ namespace HHUpdateApp
         /// </summary>
         public UpdateWork()
         {
-
         }
 
         /// <summary>
@@ -90,12 +90,13 @@ namespace HHUpdateApp
         /// </summary>
         public void AppStart()
         {
-            string[] AppStartName = RemoteVerInfo.ApplicationStart.Split('#');
-            foreach (var item in AppStartName)
+            string[] appStartName = RemoteVerInfo.ApplicationStart.Split('#');
+            foreach (var item in appStartName)
             {
                 LogManger.Instance.Info("应用程序重启：启动" + item);
                 Process.Start(Path.Combine(ProgramDirectoryName, item));
             }
+
             return;
         }
 
@@ -111,7 +112,6 @@ namespace HHUpdateApp
                 {
                     LogManger.Instance.Info("下载更新程序：下载更新包文件" + RemoteVerInfo.ReleaseVersion);
                     web.DownloadFile(RemoteVerInfo.ReleaseUrl, tempPath + RemoteVerInfo.ReleaseVersion + ".zip");
-                    return;
                 }
                 catch (Exception ex)
                 {
@@ -131,8 +131,13 @@ namespace HHUpdateApp
                 DirectoryInfo di = new DirectoryInfo(ProgramDirectoryName);
                 foreach (var item in di.GetFiles())
                 {
-                    File.Copy(item.FullName, bakPath + item.Name, true);
+                    //判断文件是否是指定忽略的文件
+                    if (!RemoteVerInfo.IgnoreFile.Contains(item.Name))
+                    {
+                        File.Copy(item.FullName, bakPath + item.Name, true);
+                    }
                 }
+
                 //文件夹复制 
                 foreach (var item in di.GetDirectories())
                 {
@@ -142,8 +147,8 @@ namespace HHUpdateApp
                         CopyDirectory(item.FullName, bakPath);
                     }
                 }
+
                 LogManger.Instance.Info("备份应用程序：备份操作执行完成");
-                return;
             }
             catch (Exception ex)
             {
@@ -163,6 +168,7 @@ namespace HHUpdateApp
                 {
                     DelLocal();
                 }
+
                 string packageFileName = tempPath + RemoteVerInfo.ReleaseVersion + ".zip";
 
                 using (ZipFile zip = new ZipFile(packageFileName, Encoding.Default))
@@ -180,7 +186,7 @@ namespace HHUpdateApp
             finally
             {
                 //删除下载的临时文件
-                DelTempFile(RemoteVerInfo.ReleaseVersion + ".zip");//删除更新包
+                DelTempFile(RemoteVerInfo.ReleaseVersion + ".zip"); //删除更新包
                 LogManger.Instance.Info("更新程序：临时文件 " + RemoteVerInfo.ReleaseVersion + ".zip" + " 删除完成");
             }
         }
@@ -188,49 +194,51 @@ namespace HHUpdateApp
         /// <summary>
         /// 文件拷贝
         /// </summary>
-        /// <param name="srcdir">源目录</param>
-        /// <param name="desdir">目标目录</param>
-        private void CopyDirectory(string srcdir, string desdir)
+        /// <param name="srcDir">源目录</param>
+        /// <param name="desDir">目标目录</param>
+        private void CopyDirectory(string srcDir, string desDir)
         {
-            string folderName = srcdir.Substring(srcdir.LastIndexOf("\\") + 1);
+            string folderName = srcDir.Substring(srcDir.LastIndexOf("\\") + 1);
 
-            string desfolderdir = desdir + "\\" + folderName;
+            string desFolderDir = desDir + "\\" + folderName;
 
-            if (desdir.LastIndexOf("\\") == (desdir.Length - 1))
+            if (desDir.LastIndexOf("\\") == (desDir.Length - 1))
             {
-                desfolderdir = desdir + folderName;
+                desFolderDir = desDir + folderName;
             }
-            string[] filenames = Directory.GetFileSystemEntries(srcdir);
-            foreach (string file in filenames)// 遍历所有的文件和目录
+
+            string[] fileNames = Directory.GetFileSystemEntries(srcDir);
+            foreach (string file in fileNames) // 遍历所有的文件和目录
             {
-                if (Directory.Exists(file))// 先当作目录处理如果存在这个目录就递归Copy该目录下面的文件
+                if (Directory.Exists(file)) // 先当作目录处理如果存在这个目录就递归Copy该目录下面的文件
                 {
-                    string currentdir = desfolderdir + "\\" + file.Substring(file.LastIndexOf("\\") + 1);
-                    if (!Directory.Exists(currentdir))
+                    string currentDir = desFolderDir + "\\" + file.Substring(file.LastIndexOf("\\") + 1);
+                    if (!Directory.Exists(currentDir))
                     {
-                        Directory.CreateDirectory(currentdir);
+                        Directory.CreateDirectory(currentDir);
                     }
-                    CopyDirectory(file, desfolderdir);
+
+                    CopyDirectory(file, desFolderDir);
                 }
                 else // 否则直接copy文件
                 {
-                    string srcfileName = file.Substring(file.LastIndexOf("\\") + 1);
-                    srcfileName = desfolderdir + "\\" + srcfileName;
-                    if (!Directory.Exists(desfolderdir))
+                    string srcFileName = file.Substring(file.LastIndexOf("\\") + 1);
+                    srcFileName = desFolderDir + "\\" + srcFileName;
+                    if (!Directory.Exists(desFolderDir))
                     {
-                        Directory.CreateDirectory(desfolderdir);
+                        Directory.CreateDirectory(desFolderDir);
                     }
-                    File.Copy(file, srcfileName, true);
+
+                    File.Copy(file, srcFileName, true);
                 }
             }
-            return;
         }
 
 
         /// <summary>
         /// 删除临时文件
         /// </summary>
-        private void DelTempFile(String name)
+        private void DelTempFile(string name)
         {
             FileInfo file = new FileInfo(tempPath + name);
             file.Delete();
@@ -262,9 +270,8 @@ namespace HHUpdateApp
                     {
                         File.Delete(item.FullName);
                     }
-
-
                 }
+
                 foreach (var item in di.GetDirectories())
                 {
                     if (item.Name != mainDirectoryName)
@@ -272,14 +279,11 @@ namespace HHUpdateApp
                         item.Delete(true);
                     }
                 }
-                return;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-
         }
-
     }
 }

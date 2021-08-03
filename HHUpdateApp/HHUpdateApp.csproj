@@ -141,7 +141,6 @@
     <EmbeddedResource Include="UpdateForm.resx">
       <DependentUpon>UpdateForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="app.config.Default" />
     <None Include="app.config" />
     <None Include="HHversion.json" />
     <None Include="Log4net.config">
