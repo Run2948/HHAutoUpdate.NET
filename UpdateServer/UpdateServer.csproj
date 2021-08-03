@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0">
+  <ItemGroup>
+    <Content Include=".gitignore" />
+    <Content Include="app.js" />
+    <Content Include="index.html" />
+    <Content Include="routes\api.js" />
+    <Content Include="routes\index.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".prettierrc" />
+    <None Include="package-lock.json" />
+    <None Include="package.json" />
+    <None Include="process.json" />
+    <None Include="uploads\79b454aa-2c91-49a0-b384-f1b5e817d9ba.zip" />
+    <None Include="uploads\apps\test-app.json" />
+  </ItemGroup>
+</Project>

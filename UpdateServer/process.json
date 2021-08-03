@@ -1,0 +1,21 @@
+{
+  "name": "app",
+  "script": "app.js",
+  "cwd": "./",
+  "watch": [
+    "./data"
+  ],
+  "ignore_watch": [
+    "node_modules",
+    "logs",
+    "public"
+  ],
+  "watch_options": {
+    "followSymlinks": false
+  },
+  "error_file": "./logs/app-err.log",
+  "out_file": "./logs/app-out.log",
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
