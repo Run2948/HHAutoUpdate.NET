@@ -17,16 +17,16 @@
                 </div>
                 <div class="panel-body">          
                     <form action="/api/app?appKey=me.eassist.dental" method="POST" class="form-horizontal" enctype="multipart/form-data" role="form">
-                        <div class="form-group">   
+                        <div class="form-group">
                             <label for="appId" class="col-sm-2 control-label">Application Id</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="appId" id="appId" placeholder="Please enter AppId" value="test-app" required/>
-                            </div>                   
-                        </div>                        
-                        <div class="form-group">   
+                                <input type="text" class="form-control" name="appId" id="appId" placeholder="Please enter AppId" value="test-app" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="appName" class="col-sm-2 control-label">Application Process</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="appName" id="appName" placeholder="Please enter AppName" value="HHUpdate.Test" required/>
+                                <input type="text" class="form-control" name="appName" id="appName" placeholder="Please enter AppName" value="HHUpdate.Test" required />
                             </div>
                         </div>
                         <div class="form-group">
@@ -34,14 +34,25 @@
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">V</div>
-                                    <input type="text" class="form-control" id="appVersion" name="appVersion" placeholder="Please enter AppVersion" value="1.0.0.1" required/>
+                                    <input type="text" class="form-control" id="appVersion" name="appVersion" placeholder="Please enter AppVersion" value="1.0.0.1" required />
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">   
-                            <label for="appFile" class="col-sm-2 control-label">Update Zip</label>
+                        <div class="form-group">
+                            <label for="appFile" class="col-sm-2 control-label">Upload Zip Package</label>
                             <div class="col-sm-10">
-                                <input type="file" name="file" id="appFile" placeholder="Please upload Update.zip" value="" required/>
+                                <input type="file" name="file" id="appFile" placeholder="Please upload Update.zip" value="" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Select Update Mode</label>
+                            <div class="col-sm-10">
+                                <label for="updateMode1" class="radio-inline">
+                                    <input type="radio" name="updateMode" id="updateMode1" placeholder="Please select UpdateMode" value="1" checked /> Cover
+                                </label>
+                                <label for="updateMode2" class="radio-inline">
+                                    <input type="radio" name="updateMode" id="updateMode2" placeholder="Please select UpdateMode" value="2" /> New Install
+                                </label>
                             </div>
                         </div>
                         <div class="form-group">

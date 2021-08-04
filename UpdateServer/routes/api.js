@@ -81,7 +81,7 @@ router.post('/app', uploadStorage.single('file'), async (req, res) => {
   info.ReleaseDate = new Date().Format("yyyyMMdd");
   info.ReleaseVersion = req.body.appVersion;
   info.ReleaseUrl = "./uploads/" + req.file.filename;
-  info.UpdateMode = "Cover";
+  info.UpdateMode =  req.body.updateMode == "1" ? "Cover":"NewInstall";
   info.VersionDesc = '\r\n' + req.body.versionDesc.trim();
   info.IgnoreFile = "";
   await fs.writeFileSync(path.resolve(`./uploads/apps/${app}.json`), JSON.stringify(info, null, "\t"));
