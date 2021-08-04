@@ -27,14 +27,12 @@ var storage = multer.diskStorage({
     cb(null, uuid.v4() + path.extname(file.originalname))
   }
 })
-const uploadStorage = multer({storage: storage})
+const uploadStorage = multer({ storage: storage })
 
 var defaultServer = (req) => {
-  return `${
-    req.protocol
-  }://${
-    req.headers.host
-  }`
+  return `${req.protocol
+    }://${req.headers.host
+    }`
 }
 
 Date.prototype.Format = function (fmt) {
@@ -81,27 +79,25 @@ router.post('/app', uploadStorage.single('file'), async (req, res) => {
   info.ReleaseDate = new Date().Format("yyyyMMdd");
   info.ReleaseVersion = req.body.appVersion;
   info.ReleaseUrl = "./uploads/" + req.file.filename;
-  info.UpdateMode =  req.body.updateMode == "1" ? "Cover":"NewInstall";
+  info.UpdateMode = req.body.updateMode == "1" ? "Cover" : "NewInstall";
   info.VersionDesc = '\r\n' + req.body.versionDesc.trim();
   info.IgnoreFile = "";
   await fs.writeFileSync(path.resolve(`./uploads/apps/${app}.json`), JSON.stringify(info, null, "\t"));
-  res.send({code: 1, msg: 'Update succeeded!', data: info})
+  res.send({ code: 1, msg: 'Update succeeded!', data: info })
 })
 
 // download
 router.get('/download/:name', async (req, res) => {
   const app = req.params.name;
   if (app == null || app == '') {
-    res.send({code: 404, msg: 'error'});
+    res.send({ code: 404, msg: 'error' });
   }
   const exists = await fs.existsSync(path.resolve(`./uploads/apps/${app}.json`))
   if (exists) {
     const info = require(`../uploads/apps/${app}.json`)
-    res.download(info.ReleaseUrl, `${
-      info.ApplicationId
-    }-V${
-      info.ReleaseDate
-    }.zip`)
+    res.download(info.ReleaseUrl, `${info.ApplicationId
+      }-V${info.ReleaseDate
+      }.zip`)
   } else {
     res.end()
   }
@@ -109,12 +105,13 @@ router.get('/download/:name', async (req, res) => {
 
 // test
 router.get('/test', (req, res) => {
+  const server = defaultServer(req)
   res.send({
     "ApplicationId": "test-app",
     "ApplicationStart": "HHUpdate.Test",
     "ReleaseDate": "20210803",
     "ReleaseVersion": "1.0.0.1",
-    "ReleaseUrl": "http://localhost:9000/api/download/test-app",
+    "ReleaseUrl": `${server}/api/download/test-app`,
     "UpdateMode": "Cover",
     "VersionDesc": "\r\nAdd updater for your application at first time.",
     "IgnoreFile": ""

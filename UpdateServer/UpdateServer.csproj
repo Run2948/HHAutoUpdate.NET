@@ -9,6 +9,7 @@
     <Content Include="index.html" />
     <Content Include="routes\api.js" />
     <Content Include="routes\index.js" />
+    <Content Include="webpack.config.js" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".prettierrc" />

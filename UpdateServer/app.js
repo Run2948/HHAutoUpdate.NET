@@ -2,14 +2,11 @@ const express = require('express')
 
 const app = express()
 
-// app.set('env', 'production')
-app.set('env', 'development')
+app.set('env', process.env.NODE_ENV || 'development')
 app.set('port', process.env.PORT || 9000);
 
-app.use(require('cors')())
-
 app.use(express.json())
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({ extended: false }))
 
 app.use('/', require('./routes/index'))
 app.use('/api/', require('./routes/api'))
@@ -41,7 +38,7 @@ if (app.get('env') === 'production') {
 }
 
 app.listen(app.get('port'), () => {
-  console.log(`the server is listening at http://localhost:${
-    app.get('port')
-  }`)
+  console.log(`env: ${app.get('env')}`)
+  console.log(`the server is listening at http://localhost:${app.get('port')
+    }`)
 })
