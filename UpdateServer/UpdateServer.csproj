@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0">
+  <PropertyGroup>
+    <ProjectGuid>{DB0789DF-ED8A-46F5-8240-FA7069F85A2B}</ProjectGuid>
+  </PropertyGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="app.js" />
@@ -12,7 +15,9 @@
     <None Include="package-lock.json" />
     <None Include="package.json" />
     <None Include="process.json" />
+    <None Include="README.md" />
     <None Include="uploads\79b454aa-2c91-49a0-b384-f1b5e817d9ba.zip" />
     <None Include="uploads\apps\test-app.json" />
+    <None Include="web.config" />
   </ItemGroup>
 </Project>

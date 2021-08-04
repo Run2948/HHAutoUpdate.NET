@@ -97,7 +97,7 @@ HHUpdateApp是.NET程序桌面应用程序。她可以轻松地将自动更新�
         }
 ```
 
-### 3，  HHversions.json
+### 3，HHversions.json
 发布版本信息HHversions.json。将HHversions.json文件放在【升级程序】可访问的服务器或远程电脑上。升级版本信息文件，这个文件包含了【业务程序】的升级信息，它有固定的格式，如下所示.注意：HHversions.json必须是UTF8格式
 ```json
 {
@@ -146,7 +146,7 @@ private void button1_Click(object sender, EventArgs e)
             }
         }
 ```
->上面示例中使用的HHversions.JSON文件
+>上面示例中使用的 HHversions.JSON 文件
 
 ```json
 {
@@ -159,6 +159,43 @@ private void button1_Click(object sender, EventArgs e)
   "IgnoreFile": ""
 }
 ```
+
+> 前端示例
+
+<img src="Images/demo8.png">
+
+服务端上传新版本后，返回
+
+```json
+{
+	"ApplicationId": "test-app",
+	"ApplicationStart": "HHUpdate.Test",
+	"ReleaseDate": "20210803",
+	"ReleaseVersion": "1.0.0.1",
+	"ReleaseUrl": "./uploads/79b454aa-2c91-49a0-b384-f1b5e817d9ba.zip",
+	"UpdateMode": "Cover",
+	"VersionDesc": "\r\nAdd updater for your application at first time.",
+	"IgnoreFile": ""
+}
+```
+
+客户端获取新版本后，返回
+
+```json
+{
+    "ApplicationStart": "HHUpdate.Test",
+    "ReleaseDate": "20210803",
+    "ReleaseVersion": "1.0.0.1",
+    "ReleaseUrl": "http://localhost:9000/api/download/test-app",
+    "UpdateMode": "Cover",
+    "VersionDesc": "\r\nAdd updater for your application at first time.",
+    "IgnoreFile": ""
+  }
+```
+
+
+
+[如何让 Node.js 应用运行在 Windows 系统 IIS 中](UpdateServer/README.md)
 
 ### 作者
 

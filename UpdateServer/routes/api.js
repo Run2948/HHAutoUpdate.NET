@@ -110,11 +110,11 @@ router.get('/download/:name', async (req, res) => {
 // test
 router.get('/test', (req, res) => {
   res.send({
-    "ApplicationId": "app",
-    "ApplicationStart": "TestApp",
+    "ApplicationId": "test-app",
+    "ApplicationStart": "HHUpdate.Test",
     "ReleaseDate": "20210803",
     "ReleaseVersion": "1.0.0.1",
-    "ReleaseUrl": "./uploads/79b454aa-2c91-49a0-b384-f1b5e817d9ba.zip",
+    "ReleaseUrl": "http://localhost:9000/api/download/test-app",
     "UpdateMode": "Cover",
     "VersionDesc": "\r\nAdd updater for your application at first time.",
     "IgnoreFile": ""
