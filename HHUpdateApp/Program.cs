@@ -92,7 +92,12 @@ namespace HHUpdateApp
         /// <summary>
         /// 拉起更新请求的业务程序名，稍后更新时，根据这个值关闭对应的进程
         /// </summary>
-        public static string LaunchAppName = "";
+        public static string LaunchAppName = Settings.Default.LaunchAppName;
+
+        /// <summary>
+        /// 用于记录检查更新时一个可以忽略的版本
+        /// </summary>
+        public static string LocalIgnoreVer = Settings.Default.LocalIgnoreVer;
 
         /// <summary>
         /// 更新信息的JSON文件所在位置

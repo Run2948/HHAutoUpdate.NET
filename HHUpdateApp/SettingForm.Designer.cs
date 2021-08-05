@@ -37,6 +37,8 @@
             this.lblServerUpdateUrl = new System.Windows.Forms.Label();
             this.lblSilentUpdate = new System.Windows.Forms.Label();
             this.cbxSilentUpdate = new System.Windows.Forms.CheckBox();
+            this.txtLocalIgnoreVer = new System.Windows.Forms.TextBox();
+            this.lblLocalIgnoreVer = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnOk
@@ -95,7 +97,7 @@
             this.lblLaunchDirectory.BackColor = System.Drawing.Color.Transparent;
             this.lblLaunchDirectory.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Bold);
             this.lblLaunchDirectory.ForeColor = System.Drawing.Color.DimGray;
-            this.lblLaunchDirectory.Location = new System.Drawing.Point(64, 107);
+            this.lblLaunchDirectory.Location = new System.Drawing.Point(64, 71);
             this.lblLaunchDirectory.Name = "lblLaunchDirectory";
             this.lblLaunchDirectory.Size = new System.Drawing.Size(118, 21);
             this.lblLaunchDirectory.TabIndex = 30;
@@ -104,14 +106,14 @@
             // 
             // txtLaunchAppName
             // 
-            this.txtLaunchAppName.Location = new System.Drawing.Point(188, 105);
+            this.txtLaunchAppName.Location = new System.Drawing.Point(188, 71);
             this.txtLaunchAppName.Name = "txtLaunchAppName";
             this.txtLaunchAppName.Size = new System.Drawing.Size(273, 20);
             this.txtLaunchAppName.TabIndex = 31;
             // 
             // txtServerUpdateUrl
             // 
-            this.txtServerUpdateUrl.Location = new System.Drawing.Point(188, 159);
+            this.txtServerUpdateUrl.Location = new System.Drawing.Point(188, 122);
             this.txtServerUpdateUrl.Name = "txtServerUpdateUrl";
             this.txtServerUpdateUrl.Size = new System.Drawing.Size(273, 20);
             this.txtServerUpdateUrl.TabIndex = 33;
@@ -121,7 +123,7 @@
             this.lblServerUpdateUrl.BackColor = System.Drawing.Color.Transparent;
             this.lblServerUpdateUrl.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Bold);
             this.lblServerUpdateUrl.ForeColor = System.Drawing.Color.DimGray;
-            this.lblServerUpdateUrl.Location = new System.Drawing.Point(64, 161);
+            this.lblServerUpdateUrl.Location = new System.Drawing.Point(64, 122);
             this.lblServerUpdateUrl.Name = "lblServerUpdateUrl";
             this.lblServerUpdateUrl.Size = new System.Drawing.Size(118, 21);
             this.lblServerUpdateUrl.TabIndex = 32;
@@ -133,7 +135,7 @@
             this.lblSilentUpdate.BackColor = System.Drawing.Color.Transparent;
             this.lblSilentUpdate.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Bold);
             this.lblSilentUpdate.ForeColor = System.Drawing.Color.DimGray;
-            this.lblSilentUpdate.Location = new System.Drawing.Point(64, 217);
+            this.lblSilentUpdate.Location = new System.Drawing.Point(64, 224);
             this.lblSilentUpdate.Name = "lblSilentUpdate";
             this.lblSilentUpdate.Size = new System.Drawing.Size(118, 21);
             this.lblSilentUpdate.TabIndex = 34;
@@ -143,17 +145,38 @@
             // cbxSilentUpdate
             // 
             this.cbxSilentUpdate.AutoSize = true;
-            this.cbxSilentUpdate.Location = new System.Drawing.Point(189, 217);
+            this.cbxSilentUpdate.Location = new System.Drawing.Point(189, 224);
             this.cbxSilentUpdate.Name = "cbxSilentUpdate";
             this.cbxSilentUpdate.Size = new System.Drawing.Size(15, 14);
             this.cbxSilentUpdate.TabIndex = 35;
             this.cbxSilentUpdate.UseVisualStyleBackColor = true;
+            // 
+            // txtLocalIgnoreVer
+            // 
+            this.txtLocalIgnoreVer.Location = new System.Drawing.Point(188, 173);
+            this.txtLocalIgnoreVer.Name = "txtLocalIgnoreVer";
+            this.txtLocalIgnoreVer.Size = new System.Drawing.Size(273, 20);
+            this.txtLocalIgnoreVer.TabIndex = 37;
+            // 
+            // lblLocalIgnoreVer
+            // 
+            this.lblLocalIgnoreVer.BackColor = System.Drawing.Color.Transparent;
+            this.lblLocalIgnoreVer.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Bold);
+            this.lblLocalIgnoreVer.ForeColor = System.Drawing.Color.DimGray;
+            this.lblLocalIgnoreVer.Location = new System.Drawing.Point(64, 173);
+            this.lblLocalIgnoreVer.Name = "lblLocalIgnoreVer";
+            this.lblLocalIgnoreVer.Size = new System.Drawing.Size(118, 21);
+            this.lblLocalIgnoreVer.TabIndex = 36;
+            this.lblLocalIgnoreVer.Text = "忽略的版本号";
+            this.lblLocalIgnoreVer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // SettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(525, 358);
+            this.Controls.Add(this.txtLocalIgnoreVer);
+            this.Controls.Add(this.lblLocalIgnoreVer);
             this.Controls.Add(this.cbxSilentUpdate);
             this.Controls.Add(this.lblSilentUpdate);
             this.Controls.Add(this.txtServerUpdateUrl);
@@ -183,5 +206,7 @@
         private System.Windows.Forms.Label lblServerUpdateUrl;
         private System.Windows.Forms.Label lblSilentUpdate;
         private System.Windows.Forms.CheckBox cbxSilentUpdate;
+        private System.Windows.Forms.TextBox txtLocalIgnoreVer;
+        private System.Windows.Forms.Label lblLocalIgnoreVer;
     }
 }

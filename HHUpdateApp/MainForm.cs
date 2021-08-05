@@ -64,6 +64,21 @@ namespace HHUpdateApp
             {
                 launchAppDirectoryName = Path.GetDirectoryName(launchProcess[0].MainModule.FileName);
                 launchAppVer = launchProcess[0].MainModule.FileVersionInfo.ProductVersion;
+
+                //检查是否是被设置忽略的版本号
+                if (launchAppVer == Program.LocalIgnoreVer)
+                {
+                    if (!silentUpdate)
+                    {
+                        HHMessageBox.Show("当前版本已经是最新版本");
+                    }
+                    else
+                    {
+                        LogManger.Instance.Info($"当前版本 {launchAppVer} 是被设置为忽略更新的版本");
+                    }
+
+                    Application.Exit();
+                }
             }
             else
             {
