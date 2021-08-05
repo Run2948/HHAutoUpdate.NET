@@ -44,8 +44,13 @@ function existsFile(file) {
   return fs.existsSync(file)
 }
 
+function readJsonFile(file) {
+  const text = fs.readFileSync(file, 'utf-8')
+  return JSON.parse(text)
+}
+
 function writeJsonFile(file, data) {
-  fs.writeFileSync(file, JSON.stringify(data, null, "\t"));
+  fs.writeFileSync(file, JSON.stringify(data, null, "\t"))
 }
 
 function initJsonFile(file, data) {
@@ -54,10 +59,26 @@ function initJsonFile(file, data) {
   }
 }
 
+function renameFile(file, newFile) {
+  fs.renameSync(file, newFile)
+}
+
+function backupJsonFile(file) {
+  if (existsFile(file)) {
+    var obj = readJsonFile(file)
+    var uuid = obj.ReleaseUrl.replace('./uploads/', '').replace('.zip', '')
+    var newFile = file.replace(obj.ApplicationId, `${obj.ApplicationId}_${uuid}`)
+    renameFile(file, newFile)
+  }
+}
+
 module.exports = {
   dateFormat,
   diskStorage,
   existsFile,
+  readJsonFile,
   writeJsonFile,
-  initJsonFile
+  initJsonFile,
+  renameFile,
+  backupJsonFile
 }

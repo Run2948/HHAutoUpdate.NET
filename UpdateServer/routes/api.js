@@ -4,7 +4,8 @@ const path = require('path')
 const {
   diskStorage,
   existsFile,
-  writeJsonFile
+  writeJsonFile,
+  backupJsonFile
 } = require("../utils")
 
 const uploadStorage = diskStorage('./uploads')
@@ -35,6 +36,7 @@ router.post('/app', uploadStorage.single('file'), (req, res) => {
   info.UpdateMode = req.body.updateMode == "1" ? "Cover" : "NewInstall";
   info.VersionDesc = '\r\n' + req.body.versionDesc.trim();
   info.IgnoreFile = "";
+  backupJsonFile(path.resolve(`./uploads/apps/${app}.json`))
   writeJsonFile(path.resolve(`./uploads/apps/${app}.json`), info);
   res.send({ code: 0, msg: 'Update succeeded!', data: info })
 })
