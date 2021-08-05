@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Update Server",
   "main": "app.js",
   "scripts": {
     "dev": "set NODE_ENV=development && nodemon app.js",
@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Run2948",
   "license": "ISC",
   "dependencies": {
     "express": "^5.0.0-alpha.8",

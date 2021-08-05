@@ -2,15 +2,12 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 const {
-  dateFormat,
   diskStorage,
   existsFile,
   writeJsonFile
 } = require("../utils")
 
 const uploadStorage = diskStorage('./uploads')
-
-Date.prototype.Format = dateFormat
 
 // query
 router.get('/app', (req, res) => {
@@ -39,7 +36,7 @@ router.post('/app', uploadStorage.single('file'), (req, res) => {
   info.VersionDesc = '\r\n' + req.body.versionDesc.trim();
   info.IgnoreFile = "";
   writeJsonFile(path.resolve(`./uploads/apps/${app}.json`), info);
-  res.send({ code: 1, msg: 'Update succeeded!', data: info })
+  res.send({ code: 0, msg: 'Update succeeded!', data: info })
 })
 
 // download

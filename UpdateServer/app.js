@@ -1,5 +1,8 @@
 const express = require('express')
 const session = require("express-session")
+const { dateFormat } = require("./utils")
+
+Date.prototype.Format = dateFormat
 
 const app = express()
 
