@@ -28,10 +28,6 @@ module.exports = {
           to: "index.html"
         },
         {
-          from: "config.json",
-          to: "config.json"
-        },
-        {
           from: "web.config",
           to: "web.config"
         }

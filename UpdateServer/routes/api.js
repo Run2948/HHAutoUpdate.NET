@@ -5,7 +5,8 @@ const {
   diskStorage,
   existsFile,
   writeJsonFile,
-  backupJsonFile
+  backupJsonFile,
+  readJsonFile
 } = require("../utils")
 
 const uploadStorage = diskStorage('./uploads')
@@ -16,7 +17,7 @@ router.get('/app', (req, res) => {
   let app = query.app || "app"
   const server = `${req.protocol}://${req.headers.host}`
   if (existsFile(path.resolve(`./uploads/apps/${app}.json`))) {
-    const info = require(`../uploads/apps/${app}.json`)
+    const info = readJsonFile(path.resolve(`./uploads/apps/${app}.json`))
     info.ReleaseUrl = `${server}/api/download/${app}`
     res.send(info)
   } else {
@@ -48,10 +49,8 @@ router.get('/download/:name', (req, res) => {
     res.send({ code: 404, msg: 'error' });
   }
   if (existsFile(path.resolve(`./uploads/apps/${app}.json`))) {
-    const info = require(`../uploads/apps/${app}.json`)
-    res.download(info.ReleaseUrl, `${info.ApplicationId
-      }-V${info.ReleaseDate
-      }.zip`)
+    const info = readJsonFile(path.resolve(`./uploads/apps/${app}.json`))
+    res.download(path.resolve(info.ReleaseUrl), `${info.ApplicationId}-V${info.ReleaseDate}.zip`)
   } else {
     res.end()
   }

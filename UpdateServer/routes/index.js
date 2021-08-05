@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 const {
+  readJsonFile,
   initJsonFile
 } = require("../utils")
 
@@ -11,7 +12,7 @@ router.get('/', (req, res) => {
 
 router.get('/form', (req, res) => {
   initJsonFile(path.resolve(`./config.json`), { user: 'root', pwd: '1qaz@WSX' })
-  const { user: defaultUser, pwd: defaultPwd } = require(`../config.json`)
+  const { user: defaultUser, pwd: defaultPwd } = readJsonFile(path.resolve(`./config.json`))
   const { user, pwd } = req.session
   if (user && user == defaultUser
     && pwd && pwd == defaultPwd
@@ -23,7 +24,7 @@ router.get('/form', (req, res) => {
 })
 
 router.post('/form', (req, res) => {
-  const { user: defaultUser, pwd: defaultPwd } = require(`../config.json`)
+  const { user: defaultUser, pwd: defaultPwd } = readJsonFile(path.resolve(`./config.json`))
   const { user, pwd } = req.body
   if (user && user == defaultUser
     && pwd && pwd == defaultPwd
