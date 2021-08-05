@@ -1,67 +1,23 @@
 const express = require('express')
 const router = express.Router()
-const fs = require('fs')
 const path = require('path')
+const {
+  dateFormat,
+  diskStorage,
+  existsFile,
+  writeJsonFile
+} = require("../utils")
 
-var uuid = require('uuid');
+const uploadStorage = diskStorage('./uploads')
 
-var defaultFolder = './uploads'
-
-const multer = require('multer')
-
-var createFolder = (folder) => {
-  try {
-    fs.accessSync(folder)
-  } catch (error) {
-    fs.mkdirSync(folder)
-  }
-};
-
-createFolder(defaultFolder)
-
-var storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, defaultFolder)
-  },
-  filename(req, file, cb) {
-    cb(null, uuid.v4() + path.extname(file.originalname))
-  }
-})
-const uploadStorage = multer({ storage: storage })
-
-var defaultServer = (req) => {
-  return `${req.protocol
-    }://${req.headers.host
-    }`
-}
-
-Date.prototype.Format = function (fmt) {
-  var o = {
-    "M+": this.getMonth() + 1,
-    "d+": this.getDate(),
-    "h+": this.getHours(),
-    "m+": this.getMinutes(),
-    "s+": this.getSeconds(),
-    "S": this.getMilliseconds()
-  };
-  if (/(y+)/.test(fmt)) {
-    fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length))
-  }
-  for (var k in o) {
-    if (new RegExp("(" + k + ")").test(fmt)) {
-      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-    }
-  }
-  return fmt;
-}
+Date.prototype.Format = dateFormat
 
 // query
-router.get('/app', async (req, res) => {
+router.get('/app', (req, res) => {
   const query = req.query
   let app = query.app || "app"
-  const server = defaultServer(req)
-  const exists = await fs.existsSync(path.resolve(`./uploads/apps/${app}.json`))
-  if (exists) {
+  const server = `${req.protocol}://${req.headers.host}`
+  if (existsFile(path.resolve(`./uploads/apps/${app}.json`))) {
     const info = require(`../uploads/apps/${app}.json`)
     info.ReleaseUrl = `${server}/api/download/${app}`
     res.send(info)
@@ -71,7 +27,7 @@ router.get('/app', async (req, res) => {
 })
 
 // update
-router.post('/app', uploadStorage.single('file'), async (req, res) => {
+router.post('/app', uploadStorage.single('file'), (req, res) => {
   const app = req.body.appId;
   let info = {};
   info.ApplicationId = app;
@@ -82,18 +38,17 @@ router.post('/app', uploadStorage.single('file'), async (req, res) => {
   info.UpdateMode = req.body.updateMode == "1" ? "Cover" : "NewInstall";
   info.VersionDesc = '\r\n' + req.body.versionDesc.trim();
   info.IgnoreFile = "";
-  await fs.writeFileSync(path.resolve(`./uploads/apps/${app}.json`), JSON.stringify(info, null, "\t"));
+  writeJsonFile(path.resolve(`./uploads/apps/${app}.json`), info);
   res.send({ code: 1, msg: 'Update succeeded!', data: info })
 })
 
 // download
-router.get('/download/:name', async (req, res) => {
+router.get('/download/:name', (req, res) => {
   const app = req.params.name;
   if (app == null || app == '') {
     res.send({ code: 404, msg: 'error' });
   }
-  const exists = await fs.existsSync(path.resolve(`./uploads/apps/${app}.json`))
-  if (exists) {
+  if (existsFile(path.resolve(`./uploads/apps/${app}.json`))) {
     const info = require(`../uploads/apps/${app}.json`)
     res.download(info.ReleaseUrl, `${info.ApplicationId
       }-V${info.ReleaseDate
@@ -105,7 +60,7 @@ router.get('/download/:name', async (req, res) => {
 
 // test
 router.get('/test', (req, res) => {
-  const server = defaultServer(req)
+  const server = `${req.protocol}://${req.headers.host}`
   res.send({
     "ApplicationId": "test-app",
     "ApplicationStart": "HHUpdate.Test",

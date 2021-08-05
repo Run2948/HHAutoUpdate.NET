@@ -19,6 +19,10 @@ module.exports = {
         //   to: "uploads"
         // },
         {
+          from: "login.html",
+          to: "login.html"
+        },
+        {
           from: "index.html",
           to: "index.html"
         },
