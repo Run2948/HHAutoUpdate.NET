@@ -1,7 +1,8 @@
 // https://webpack.docschina.org/plugins/terser-webpack-plugin/
 const path = require('path');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const TerserPlugin = require("terser-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin")
 // const NodeExternals = require('webpack-node-externals')
 
 module.exports = {
@@ -14,10 +15,10 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin({
       patterns: [
-        // {
-        //   from: "uploads",
-        //   to: "uploads"
-        // },
+        {
+          from: "uploads",
+          to: "uploads"
+        },
         {
           from: "login.html",
           to: "login.html"
@@ -27,11 +28,16 @@ module.exports = {
           to: "index.html"
         },
         {
+          from: "config.json",
+          to: "config.json"
+        },
+        {
           from: "web.config",
           to: "web.config"
         }
       ]
-    })
+    }),
+    new CleanWebpackPlugin()
   ],
   // externals: [
   //   NodeExternals()
