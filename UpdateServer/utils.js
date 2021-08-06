@@ -45,8 +45,11 @@ function existsFile(file) {
 }
 
 function readJsonFile(file) {
-  const text = fs.readFileSync(file, 'utf-8')
-  return JSON.parse(text)
+  if (existsFile(file)) {
+    const text = fs.readFileSync(file, 'utf-8')
+    return JSON.parse(text)
+  }
+  return null
 }
 
 function writeJsonFile(file, data) {
@@ -57,15 +60,18 @@ function initJsonFile(file, data) {
   if (!existsFile(file)) {
     writeJsonFile(file, data)
   }
+  return data
 }
 
 function renameFile(file, newFile) {
-  fs.renameSync(file, newFile)
+  if (existsFile(file)) {
+    fs.renameSync(file, newFile)
+  }
 }
 
 function backupJsonFile(file) {
-  if (existsFile(file)) {
-    var obj = readJsonFile(file)
+  var obj = readJsonFile(file)
+  if (obj !== null) {
     var uuid = obj.ReleaseUrl.replace('./uploads/', '').replace('.zip', '')
     var newFile = file.replace(obj.ApplicationId, `${obj.ApplicationId}_${uuid}`)
     renameFile(file, newFile)
