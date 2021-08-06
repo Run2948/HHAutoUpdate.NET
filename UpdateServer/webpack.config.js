@@ -2,6 +2,7 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const FileManagerPlugin = require('filemanager-webpack-plugin')
 const TerserPlugin = require("terser-webpack-plugin")
 // const NodeExternals = require('webpack-node-externals')
 
@@ -33,7 +34,31 @@ module.exports = {
         }
       ]
     }),
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
+    new FileManagerPlugin({
+      events: {
+        onStart: {
+          delete: [
+            './bin',
+            './obj',
+            './dist/release.zip'
+          ]
+        },
+        onEnd: {
+          archive: [
+            { source: './dist', destination: './dist-release.zip' },
+          ],
+          delete: [
+            './dist/*'
+          ],
+          move: [
+            { source: './dist-release.zip', destination: './dist/release.zip' }
+          ]
+        }
+      },
+      runTasksInSeries: false,
+      runOnceInWatchMode: false,
+    })
   ],
   // externals: [
   //   NodeExternals()
