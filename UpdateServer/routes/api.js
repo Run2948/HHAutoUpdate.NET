@@ -26,7 +26,7 @@ router.get('/app', (req, res) => {
   const server = `${req.protocol}://${req.headers.host}`
   if (existsFile(path.resolve(`./uploads/apps/${appId}.json`))) {
     const info = readJsonFile(path.resolve(`./uploads/apps/${appId}.json`))
-    info.ReleaseUrl = `${server}/api/download?appId=${appId}?appKey=${appKey}`
+    info.ReleaseUrl = `${server}/api/download?appId=${appId}` + (auth ? `&appKey=${appKey}` : '')
     res.send(info)
   } else {
     res.end()
@@ -96,7 +96,7 @@ router.get('/test', (req, res) => {
     "ApplicationStart": "HHUpdate.Test",
     "ReleaseDate": "20210803",
     "ReleaseVersion": "1.0.0.1",
-    "ReleaseUrl": `${server}/api/download?appId=test-app` + auth ? `&appKey=${appKey}` : '',
+    "ReleaseUrl": `${server}/api/download?appId=test-app` + (auth ? `&appKey=${appKey}` : ''),
     "UpdateMode": "Cover",
     "VersionDesc": "\r\nAdd updater for your application at first time.",
     "IgnoreFile": ""
